@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Tambah Data Produk</title>
+    <style>
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            width: 150px;
+            display: inline-block;
+        }
+        input[type="text"], textarea, select {
+            width: 200px;
+        }
+
+        #captchaDisplay {
+            font-weight: bold;
+        }
+
+    </style>
+    <script>
+        function validateForm() {
+            const namaProduk = document.forms["productForm"]["namaProduk"].value;
+            const deskripsi = document.forms["productForm"]["deskripsi"].value;
+            const kategori = document.forms["productForm"]["kategori"].value;
+            const subKategori = document.forms["productForm"]["subKategori"].value;
+            const hargaSatuan = document.forms["productForm"]["hargaSatuan"].value;
+            const grosir = document.forms["productForm"]["grosir"].value;
+            const hargaGrosir = document.forms["productForm"]["hargaGrosir"].value;
+            const jasaKirim = document.querySelectorAll('input[name="jasaKirim"]:checked').length;
+            const captcha = document.forms["productForm"]["captcha"].value;
+
+            if (namaProduk.length < 5 || namaProduk.length > 30) {
+                alert("Nama Produk harus diisi, minimal 5 karakter, maksimal 30 karakter.");
+                return false;
+            }
+
+            if (deskripsi.length < 5 || deskripsi.length > 100) {
+                alert("Deskripsi Produk harus diisi, minimal 5 karakter, maksimal 100 karakter.");
+                return false;
+            }
+
+            if (kategori === "") {
+                alert("Kategori harus diisi.");
+                return false;
+            }
+
+            if (subKategori === "") {
+                alert("Sub Kategori harus diisi sesuai dengan kategori yang dipilih.");
+                return false;
+            }
+
+            if (isNaN(hargaSatuan) || hargaSatuan === "") {
+                alert("Harga Satuan harus diisi dan berupa nilai numerik.");
+                return false;
+            }
+
+            if (grosir === "Ya" && (isNaN(hargaGrosir) || hargaGrosir === "")) {
+                alert("Harga Grosir harus diisi jika Grosir dipilih Ya, dan berupa nilai numerik.");
+                return false;
+            }
+
+            if (jasaKirim < 3) {
+                alert("Minimal jasa kirim yang dipilih adalah 3.");
+                return false;
+            }
+
+            if (captcha !== document.getElementById("generatedCaptcha").value) {
+                alert("Captcha tidak sesuai.");
+                return false;
+            }
+
+            alert("Input Berhasil xD");
+
+            return true;
+        }
+
+        function generateCaptcha() {
+            const captcha = [];
+            const charsArray = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+            const lengthOtp = 5;
+            for (let i = 0; i < lengthOtp; i++) {
+                const index = Math.floor(Math.random() * charsArray.length);
+                captcha.push(charsArray[index]);
+            }
+            const captchaString = captcha.join("");
+            document.getElementById("generatedCaptcha").value = captchaString;
+            document.getElementById("captchaDisplay").innerHTML = captchaString;
+        }
+
+        window.onload = function() {
+            generateCaptcha();
+        }
+    </script>
+</head>
+<body>
+    <h1>Form Tambah Data Produk</h1>
+    <form name="productForm" onsubmit="return validateForm()">
+        <div class="form-group">
+            <label for="namaProduk">Nama Produk:</label>
+            <input type="text" id="namaProduk" name="namaProduk">
+        </div>
+        <div class="form-group">
+            <label for="deskripsi">Deskripsi:</label>
+            <textarea id="deskripsi" name="deskripsi"></textarea>
+        </div>
+        <div class="form-group">
+            <label for="kategori">Kategori:</label>
+            <select id="kategori" name="kategori">
+                <option value="">--Pilih Kategori--</option>
+                <option value="Baju">Baju</option>
+                <option value="Elektronik">Elektronik</option>
+                <option value="Alat Tulis">Alat Tulis</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="subKategori">Sub Kategori:</label>
+            <select id="subKategori" name="subKategori">
+                <option value="">--Pilih Sub Kategori--</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="hargaSatuan">Harga Satuan:</label>
+            <input type="text" id="hargaSatuan" name="hargaSatuan">
+        </div>
+        <div class="form-group">
+            <label>Grosir:</label>
+            <input type="radio" id="grosirYa" name="grosir" value="Ya">
+            <label for="grosirYa">Ya</label>
+            <input type="radio" id="grosirTidak" name="grosir" value="Tidak">
+            <label for="grosirTidak">Tidak</label>
+        </div>
+        <div class="form-group">
+            <label for="hargaGrosir">Harga Grosir:</label>
+            <input type="text" id="hargaGrosir" name="hargaGrosir">
+        </div>
+        <div class="form-group">
+            <label>Jasa Kirim:</label>
+            <div class="checkbox-group">
+                <input type="checkbox" id="jne" name="jasaKirim" value="JNE">
+                <label for="jne">JNE</label>
+                <input type="checkbox" id="tiki" name="jasaKirim" value="TIKI">
+                <label for="tiki">TIKI</label>
+                <input type="checkbox" id="siCepat" name="jasaKirim" value="SiCepat">
+                <label for="siCepat">SiCepat</label>
+                <input type="checkbox" id="ninjaExpress" name="jasaKirim" value="Ninja Express">
+                <label for="ninjaExpress">Ninja Express</label>
+                <input type="checkbox" id="wahana" name="jasaKirim" value="Wahana">
+                <label for="wahana">Wahana</label>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="captcha">Captcha:</label>
+            <span id="captchaDisplay"></span><br>
+            <input type="hidden" id="generatedCaptcha">
+            <input type="text" id="captcha" name="captcha">
+        </div>
+        <input type="submit" value="Submit">
+        <input type="reset" value="Reset" onclick="generateCaptcha()">
+    </form>
+
+    <script>
+        document.getElementById('kategori').addEventListener('change', function() {
+            const kategori = this.value;
+            const subKategori = document.getElementById('subKategori');
+            
+            subKategori.innerHTML = '<option value="">--Pilih Sub Kategori--</option>';
+
+            if (kategori === 'Baju') {
+                subKategori.innerHTML += '<option value="Baju Pria">Baju Pria</option>';
+                subKategori.innerHTML += '<option value="Baju Wanita">Baju Wanita</option>';
+                subKategori.innerHTML += '<option value="Baju Anak">Baju Anak</option>';
+            } else if (kategori === 'Elektronik') {
+                subKategori.innerHTML += '<option value="Mesin Cuci">Mesin Cuci</option>';
+                subKategori.innerHTML += '<option value="Kulkas">Kulkas</option>';
+                subKategori.innerHTML += '<option value="AC">AC</option>';
+            } else if (kategori === 'Alat Tulis') {
+                subKategori.innerHTML += '<option value="Kertas">Kertas</option>';
+                subKategori.innerHTML += '<option value="Map">Map</option>';
+                subKategori.innerHTML += '<option value="Pulpen">Pulpen</option>';
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const grosirYa = document.getElementById('grosirYa');
+            const grosirTidak = document.getElementById('grosirTidak');
+            const hargaGrosir = document.getElementById('hargaGrosir');
+
+            function toggleHargaGrosir() {
+                if (grosirYa.checked) {
+                    hargaGrosir.disabled = false;
+                } else if (grosirTidak.checked) {
+                    hargaGrosir.disabled = true;
+                    hargaGrosir.value = '';
+                }
+            }
+
+            grosirYa.addEventListener('change', toggleHargaGrosir);
+            grosirTidak.addEventListener('change', toggleHargaGrosir);
+
+            toggleHargaGrosir();
+        });
+    </script>
+</body>
+</html>
